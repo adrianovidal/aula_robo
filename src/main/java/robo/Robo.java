@@ -1,6 +1,8 @@
 package robo;
 
-import java.text.MessageFormat;
+import components.Logger;
+
+import static java.text.MessageFormat.format;
 
 public class Robo {
 
@@ -11,6 +13,8 @@ public class Robo {
 
     private Integer ateX = 0;
     private Integer ateY = 0;
+
+    private StringBuilder arquivoLog;
 
     public Robo() {
     }
@@ -23,28 +27,28 @@ public class Robo {
     public void andarDireta() {
         if (posicaoX + 1 <= TAMANHO_X) {
             posicaoX += 1;
-            System.out.print("Andou para direita! ");
+            arquivoLog.append("Andou para direita! ");
         }
     }
 
     public void andarEsquerda() {
         if (posicaoY - 1 >= 1) {
             posicaoX -= 1;
-            System.out.print("Andou para esquerda!");
+            arquivoLog.append("Andou para esquerda!");
         }
     }
 
     public void andarCima() {
         if (posicaoY - 1 >= 1) {
             posicaoY -= 1;
-            System.out.print("Andou para cima!    ");
+            arquivoLog.append("Andou para cima!    ");
         }
     }
 
     public void andarBaixo() {
         if (posicaoY + 1 <= TAMANHO_Y) {
             posicaoY += 1;
-            System.out.print("Andou para baixo!   ");
+            arquivoLog.append("Andou para baixo!   ");
         }
     }
 
@@ -62,7 +66,8 @@ public class Robo {
     }
 
     public void iniciarTrajeto() {
-        System.out.println(MessageFormat.format("\nNovo trajeto [{0}][{1}]  - Posição inicial [{2}]:[{3}]", ateX, ateY, posicaoX, posicaoY));
+        arquivoLog = new StringBuilder();
+        arquivoLog.append(format("\nNovo trajeto [{0}][{1}]  - Posição inicial [{2}][{3}]\n", ateX, ateY, posicaoX, posicaoY));
 
         if (posicaoX <= ateX) {
             caminharEixoX(posicaoX, ateX, true);
@@ -74,21 +79,22 @@ public class Robo {
             caminhaEixoY(posicaoY, ateY, true);
         } else {
             caminhaEixoY(ateY, posicaoY, false);
-
         }
+
+        Logger.salvarArquivo(arquivoLog.toString());
     }
 
     private void caminharEixoX(Integer posicaoX, Integer ateX, boolean paraFrente) {
         for (int i = posicaoX; i < ateX; i++) {
             if (paraFrente) { andarDireta(); } else { andarEsquerda(); }
-            System.out.println(MessageFormat.format(" - Posição Atual   [{0}]:[{1}]", this.posicaoX, this.posicaoY));
+            arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
         }
     }
 
     private void caminhaEixoY(Integer posicaoY, Integer ateY, boolean paraBaixo) {
         for (int i = posicaoY; i < ateY; i++) {
             if (paraBaixo) { andarBaixo(); } else { andarCima(); }
-            System.out.println(MessageFormat.format(" - Posição Atual   [{0}]:[{1}]", this.posicaoX, this.posicaoY));
+            arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
         }
     }
 }
