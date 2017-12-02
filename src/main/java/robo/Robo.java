@@ -11,12 +11,21 @@ public class Robo {
     private Integer posicaoX = 1;
     private Integer posicaoY = 1;
 
-    private Integer ateX = 0;
-    private Integer ateY = 0;
+    private Integer ateX = 1;
+    private Integer ateY = 1;
 
     private StringBuilder arquivoLog;
 
     public Robo() {
+        arquivoLog = new StringBuilder();
+    }
+
+    public static void main(String[] args) {
+        Robo robo = new Robo();
+        robo.tamanhoMapa(10, 10);
+
+        robo.novaCoordenada(9, 9);
+        robo.iniciarTrajeto();
     }
 
     public void tamanhoMapa(Integer x, Integer y) {
@@ -67,7 +76,9 @@ public class Robo {
 
     public void iniciarTrajeto() {
         arquivoLog = new StringBuilder();
-        arquivoLog.append(format("\nNovo trajeto [{0}][{1}]  - Posição inicial [{2}][{3}]\n", ateX, ateY, posicaoX, posicaoY));
+        arquivoLog.append(format("\nPosição inicial [{2}][{3}] -  Novo trajeto [{0}][{1}]\n", posicaoX, posicaoY, ateX, ateY));
+
+        //exibir(TAMANHO_X, TAMANHO_Y, posicaoX, posicaoY); //TODO exibe o trajeto
 
         if (posicaoX <= ateX) {
             caminharEixoX(posicaoX, ateX, true);
@@ -87,6 +98,7 @@ public class Robo {
     private void caminharEixoX(Integer posicaoX, Integer ateX, boolean paraFrente) {
         for (int i = posicaoX; i < ateX; i++) {
             if (paraFrente) { andarDireta(); } else { andarEsquerda(); }
+            //exibir(TAMANHO_X, TAMANHO_Y, this.posicaoX, this.posicaoY); //TODO exibe o trajeto
             arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
         }
     }
@@ -94,6 +106,7 @@ public class Robo {
     private void caminhaEixoY(Integer posicaoY, Integer ateY, boolean paraBaixo) {
         for (int i = posicaoY; i < ateY; i++) {
             if (paraBaixo) { andarBaixo(); } else { andarCima(); }
+            //exibir(TAMANHO_X, TAMANHO_Y, this.posicaoX, this.posicaoY); //TODO exibe o trajeto
             arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
         }
     }
