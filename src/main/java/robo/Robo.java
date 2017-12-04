@@ -1,7 +1,6 @@
 package robo;
 
-import components.Logger;
-
+import static components.Logger.salvarArquivo;
 import static java.text.MessageFormat.format;
 
 public class Robo {
@@ -15,7 +14,7 @@ public class Robo {
     private Integer ateY = 1;
 
     public Robo() {
-        Logger.salvarArquivo(format("Posição inicial [{0}][{1}]", posicaoX, posicaoY));
+        salvarArquivo(format("Posição inicial [{0}][{1}]", posicaoX, posicaoY));
     }
 
     public void tamanhoMapa(Integer x, Integer y) {
@@ -27,40 +26,41 @@ public class Robo {
         for (int i = 0; i < passos; i++) {
             if (posicaoX + 1 <= TAMANHO_X) {
                 posicaoX += 1;
+                salvarLog("direita");
             }
         }
-        salvarLog("direita", passos);
     }
 
     public void andarEsquerda(Integer passos) {
         for (int i = 0; i < passos; i++) {
             if (posicaoY - 1 >= 1) {
                 posicaoX -= 1;
+                salvarLog("esquerda");
             }
         }
-        salvarLog("esquerda", passos);
     }
 
     public void andarCima(Integer passos) {
         for (int i = 0; i < passos; i++) {
             if (posicaoY - 1 >= 1) {
                 posicaoY -= 1;
+                salvarLog("cima");
             }
         }
-        salvarLog("cima", passos);
     }
 
     public void andarBaixo(Integer passos) {
         for (int i = 0; i < passos; i++) {
             if (posicaoY + 1 <= TAMANHO_Y) {
                 posicaoY += 1;
+                salvarLog("baixo");
             }
         }
-        salvarLog("baixo", passos);
     }
 
-    private void salvarLog(String direcao, Integer passos) {
-        Logger.salvarArquivo(format("Andou para {0}! {1} passo(s)\n", direcao, passos));
+    private void salvarLog(String direcao) {
+        salvarArquivo(format("Andou para {0}!\n", direcao));
+        salvarArquivo(format("Posição Atual [{0}][{1}]\n", posicaoX, posicaoY));
     }
 
     public Integer obterPosicaoX() {
@@ -74,7 +74,7 @@ public class Robo {
     public void novaCoordenada(Integer x, Integer y) {
         ateX = x;
         ateY = y;
-        Logger.salvarArquivo(format("Trajeto [{0}][{1}]", ateX, ateY));
+        salvarArquivo(format("Trajeto -> [{0}][{1}]", ateX, ateY));
     }
 
     public void iniciarTrajeto() {
