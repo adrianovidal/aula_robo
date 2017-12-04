@@ -14,18 +14,8 @@ public class Robo {
     private Integer ateX = 1;
     private Integer ateY = 1;
 
-    private StringBuilder arquivoLog;
-
     public Robo() {
-        arquivoLog = new StringBuilder();
-    }
-
-    public static void main(String[] args) {
-        Robo robo = new Robo();
-        robo.tamanhoMapa(10, 10);
-
-        robo.novaCoordenada(9, 9);
-        robo.iniciarTrajeto();
+        Logger.salvarArquivo(format("Posição inicial [{0}][{1}]", posicaoX, posicaoY));
     }
 
     public void tamanhoMapa(Integer x, Integer y) {
@@ -33,32 +23,44 @@ public class Robo {
         TAMANHO_Y = y;
     }
 
-    public void andarDireta() {
-        if (posicaoX + 1 <= TAMANHO_X) {
-            posicaoX += 1;
-            arquivoLog.append("Andou para direita! ");
+    public void andarDireta(Integer passos) {
+        for (int i = 0; i < passos; i++) {
+            if (posicaoX + 1 <= TAMANHO_X) {
+                posicaoX += 1;
+            }
         }
+        salvarLog("direita", passos);
     }
 
-    public void andarEsquerda() {
-        if (posicaoY - 1 >= 1) {
-            posicaoX -= 1;
-            arquivoLog.append("Andou para esquerda!");
+    public void andarEsquerda(Integer passos) {
+        for (int i = 0; i < passos; i++) {
+            if (posicaoY - 1 >= 1) {
+                posicaoX -= 1;
+            }
         }
+        salvarLog("esquerda", passos);
     }
 
-    public void andarCima() {
-        if (posicaoY - 1 >= 1) {
-            posicaoY -= 1;
-            arquivoLog.append("Andou para cima!    ");
+    public void andarCima(Integer passos) {
+        for (int i = 0; i < passos; i++) {
+            if (posicaoY - 1 >= 1) {
+                posicaoY -= 1;
+            }
         }
+        salvarLog("cima", passos);
     }
 
-    public void andarBaixo() {
-        if (posicaoY + 1 <= TAMANHO_Y) {
-            posicaoY += 1;
-            arquivoLog.append("Andou para baixo!   ");
+    public void andarBaixo(Integer passos) {
+        for (int i = 0; i < passos; i++) {
+            if (posicaoY + 1 <= TAMANHO_Y) {
+                posicaoY += 1;
+            }
         }
+        salvarLog("baixo", passos);
+    }
+
+    private void salvarLog(String direcao, Integer passos) {
+        Logger.salvarArquivo(format("Andou para {0}! {1} passo(s)\n", direcao, passos));
     }
 
     public Integer obterPosicaoX() {
@@ -72,42 +74,36 @@ public class Robo {
     public void novaCoordenada(Integer x, Integer y) {
         ateX = x;
         ateY = y;
+        Logger.salvarArquivo(format("Trajeto [{0}][{1}]", ateX, ateY));
     }
 
     public void iniciarTrajeto() {
-        arquivoLog = new StringBuilder();
-        arquivoLog.append(format("\nPosição inicial [{2}][{3}] -  Novo trajeto [{0}][{1}]\n", posicaoX, posicaoY, ateX, ateY));
-
-        //exibir(TAMANHO_X, TAMANHO_Y, posicaoX, posicaoY); //TODO exibe o trajeto
-
         if (posicaoX <= ateX) {
-            caminharEixoX(posicaoX, ateX, true);
+            caminharEixoX(ateX - posicaoX, true);
         } else {
-            caminharEixoX(ateX, posicaoX, false);
+            caminharEixoX(posicaoX - ateX, false);
         }
 
         if (posicaoY <= ateY) {
-            caminhaEixoY(posicaoY, ateY, true);
+            caminhaEixoY(ateY - posicaoY, true);
         } else {
-            caminhaEixoY(ateY, posicaoY, false);
-        }
-
-        Logger.salvarArquivo(arquivoLog.toString());
-    }
-
-    private void caminharEixoX(Integer posicaoX, Integer ateX, boolean paraFrente) {
-        for (int i = posicaoX; i < ateX; i++) {
-            if (paraFrente) { andarDireta(); } else { andarEsquerda(); }
-            //exibir(TAMANHO_X, TAMANHO_Y, this.posicaoX, this.posicaoY); //TODO exibe o trajeto
-            arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
+            caminhaEixoY(posicaoY - ateY, false);
         }
     }
 
-    private void caminhaEixoY(Integer posicaoY, Integer ateY, boolean paraBaixo) {
-        for (int i = posicaoY; i < ateY; i++) {
-            if (paraBaixo) { andarBaixo(); } else { andarCima(); }
-            //exibir(TAMANHO_X, TAMANHO_Y, this.posicaoX, this.posicaoY); //TODO exibe o trajeto
-            arquivoLog.append(format(" - Posição Atual   [{0}][{1}]\n", this.posicaoX, this.posicaoY));
+    private void caminharEixoX(Integer passos, boolean paraFrente) {
+        if (paraFrente) {
+            andarDireta(passos);
+        } else {
+            andarEsquerda(passos);
+        }
+    }
+
+    private void caminhaEixoY(Integer passos, boolean paraBaixo) {
+        if (paraBaixo) {
+            andarBaixo(passos);
+        } else {
+            andarCima(passos);
         }
     }
 }

@@ -22,14 +22,21 @@ public class Logger {
     }
 
     public static void salvarArquivo(String arquivoSalvar){
-        FileWriter arq;
-        String salvar = abrirArquivo();
-        salvar += arquivoSalvar;
+        String texto = abrirArquivo();
+        texto += arquivoSalvar;
+        salvar(texto);
+    }
+
+    public static void resetarLog() {
+        salvar("");
+    }
+
+    private static void salvar(String texto) {
         try {
+            FileWriter arq;
             arq = new FileWriter("log_robo.txt");
             PrintWriter gravarArq = new PrintWriter(arq);
-            gravarArq.printf(salvar);
-            gravarArq.printf("\n================  ====  ================\n");
+            gravarArq.printf(texto);
             arq.close();
         } catch (IOException e) {
             e.printStackTrace();

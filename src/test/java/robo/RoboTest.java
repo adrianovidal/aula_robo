@@ -1,6 +1,8 @@
 package robo;
 
+import components.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -16,6 +18,11 @@ public class RoboTest {
     })
     public static class AllTests { }
 
+    @BeforeClass
+    public static void iniciarLog() {
+        Logger.resetarLog();
+    }
+
     public static class AoMover extends RoboTest {
 
         private Robo robo;
@@ -27,15 +34,15 @@ public class RoboTest {
 
         @Test
         public void deveriaAndarParaDireita() {
-            robo.andarDireta();
+            robo.andarDireta(2);
 
-            assertEquals(new Integer(2), robo.obterPosicaoX());
+            assertEquals(new Integer(3), robo.obterPosicaoX());
             assertEquals(new Integer(1), robo.obterPosicaoY());
         }
 
         @Test
         public void deveriaAndarParaEsquerda() {
-            robo.andarEsquerda();
+            robo.andarEsquerda(1);
 
             assertEquals(new Integer(1), robo.obterPosicaoX());
             assertEquals(new Integer(1), robo.obterPosicaoY());
@@ -43,7 +50,7 @@ public class RoboTest {
 
         @Test
         public void deveriaAndarParaCima() {
-            robo.andarCima();
+            robo.andarCima(1);
 
             assertEquals(new Integer(1), robo.obterPosicaoX());
             assertEquals(new Integer(1), robo.obterPosicaoY());
@@ -51,7 +58,7 @@ public class RoboTest {
 
         @Test
         public void deveriaAndarParaBaixo() {
-            robo.andarBaixo();
+            robo.andarBaixo(1);
 
             assertEquals(new Integer(1), robo.obterPosicaoX());
             assertEquals(new Integer(2), robo.obterPosicaoY());
@@ -59,9 +66,7 @@ public class RoboTest {
 
         @Test
         public void deveriaNaoUtrapassarAhBordaDireita() {
-            robo.andarDireta();
-            robo.andarDireta();
-            robo.andarDireta();
+            robo.andarDireta(2);
 
             assertEquals(new Integer(3), robo.obterPosicaoX());
             assertEquals(new Integer(1), robo.obterPosicaoY());
@@ -69,9 +74,7 @@ public class RoboTest {
 
         @Test
         public void deveriaNaoUtrapassarAhBordaBaixo() {
-            robo.andarBaixo();
-            robo.andarBaixo();
-            robo.andarBaixo();
+            robo.andarBaixo(3);
 
             assertEquals(new Integer(1), robo.obterPosicaoX());
             assertEquals(new Integer(3), robo.obterPosicaoY());
